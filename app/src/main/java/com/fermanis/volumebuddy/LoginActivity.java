@@ -333,10 +333,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            // If successful login - navigate to the Locate_Me activity via an Intent
+            // If successful login - navigate to the LocationList activity via an Intent
             if (success) {
                 Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), LocateMe.class);
+                intent.setClass(getApplicationContext(), LocationList.class);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

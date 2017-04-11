@@ -2,22 +2,28 @@ package com.fermanis.volumebuddy;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class LocateMe extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, NewLocationDialog.NewLocationDialogListener {
 
@@ -54,11 +60,32 @@ public class LocateMe extends AppCompatActivity implements GoogleMap.OnMyLocatio
         mMap = googleMap;
 
         mMap.setOnMyLocationButtonClickListener(this);
+        loadLocations();
         enableMyLocation();
     }
 
+    private void loadLocations() {
+        // Load the Database
+        LocationDbHelper locationDbHelper = new LocationDbHelper(getApplicationContext());
+        SQLiteDatabase db = locationDbHelper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("select * from locations", null);
+
+        if (cursor.moveToFirst()) {
+            while(cursor.isAfterLast() == false) {
+                double lat = cursor.getDouble(cursor.getColumnIndex(LocationContract.LocationEntry.COLUMN_NAME_LATITUDE));
+                double longitude = cursor.getDouble(cursor.getColumnIndex(LocationContract.LocationEntry.COLUMN_NAME_LONGITUDE));
+                String name = cursor.getString(cursor.getColumnIndex(LocationContract.LocationEntry.COLUMN_NAME_NAME));
+                LatLng point = new LatLng(lat, longitude);
+                // Add a new Marker
+                mMap.addMarker(new MarkerOptions().position(point).title(name));
+                cursor.moveToNext();
+            }
+        }
+    }
+
     // Home location: -70.893576, 43.273181
-    // Check for Permissions to ACCESS_FINE_LOCATION. If permission are not granted, ask for them. If they are granted, set Location Enabled = true
+    // Check for Permissions to ACCESS_FINE_LOCATION. If permission are not granted, ask for them. If they are granted, set LocationContract Enabled = true
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE, Manifest.permission.ACCESS_FINE_LOCATION, true);
@@ -79,13 +106,22 @@ public class LocateMe extends AppCompatActivity implements GoogleMap.OnMyLocatio
         }
     }
 
-    // Callback from dialog, to handle new Location Save
+    // Callback from dialog, to handle new LocationContract Save
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, LatLng point) {
+    public void onDialogPositiveClick(DialogFragment dialog, LatLng point, Editable text) {
         // Add a new Marker
-        mMap.addMarker(new MarkerOptions().position(point).title("New Location"));
+        mMap.addMarker(new MarkerOptions().position(point).title(text.toString()));
         Toast.makeText(getApplicationContext(), point.toString(), Toast.LENGTH_SHORT).show();
-        // TODO - Store Location in Shared Preferences (OR DB) to be used for proximity events
+
+        // Create the Database
+        LocationDbHelper locationDbHelper = new LocationDbHelper(getApplicationContext());
+        SQLiteDatabase db = locationDbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(LocationContract.LocationEntry.COLUMN_NAME_LATITUDE, point.latitude);
+        values.put(LocationContract.LocationEntry.COLUMN_NAME_LONGITUDE, point.longitude);
+        values.put(LocationContract.LocationEntry.COLUMN_NAME_NAME, text.toString());
+
+        long newRowId = db.insert(LocationContract.LocationEntry.TABLE_NAME, null, values);
     }
 
     // Handler for MyLocationButton - Will be replicated, and used to "save" location as office. Currently shows a toast for validation

@@ -30,7 +30,7 @@ public abstract class PermissionUtils {
             PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
                     .show(activity.getSupportFragmentManager(), "dialog");
         } else {
-            // Location permission has not been granted yet, request it.
+            // LocationContract permission has not been granted yet, request it.
             ActivityCompat.requestPermissions(activity, new String[]{permission}, requestId);
 
         }
