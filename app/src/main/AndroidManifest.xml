@@ -22,9 +22,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name">
@@ -34,7 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LocationList"
+        <activity
+            android:name=".LocationList"
             android:label="LocationList" />
         <activity
             android:name=".LocateMe"
@@ -44,7 +42,13 @@
                 android:value="com.fermanis.volumebuddy.LocationList" />
         </activity>
 
-
+        <activity
+            android:name=".NewLocationActivity"
+            android:label="@string/title_activity_new_location">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fermanis.volumebuddy.LocateMe" />
+        </activity>
 
         <!--
          The API key for Google Maps-based APIs is defined as a string resource.
@@ -58,7 +62,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-    </application>
 
+    </application>
 
 </manifest>

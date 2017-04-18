@@ -3,6 +3,7 @@ package com.fermanis.volumebuddy;
 import android.Manifest;
 import android.app.DialogFragment;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class LocateMe extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, NewLocationDialog.NewLocationDialogListener {
+public class LocateMe extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback{
 
     private GoogleMap mMap;
     private static final String TAG = "LocateMe";
@@ -95,34 +96,17 @@ public class LocateMe extends AppCompatActivity implements GoogleMap.OnMyLocatio
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng point) {
-                    NewLocationDialog newLocationDialog = new NewLocationDialog();
-                    Bundle args = new Bundle();
-                    args.putDouble("lat", point.latitude);
-                    args.putDouble("long", point.longitude);
-                    newLocationDialog.setArguments(args);
-                    newLocationDialog.show(getFragmentManager(), new String().concat("NewLocationDialog"));
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), NewLocationActivity.class);
+                    intent.putExtra("LAT", point.latitude);
+                    intent.putExtra("LONG", point.longitude);
+                    intent.putExtra("ACTION", "NEW");
+                    startActivity(intent);
                 }
             });
         }
     }
 
-    // Callback from dialog, to handle new LocationContract Save
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog, LatLng point, Editable text) {
-        // Add a new Marker
-        mMap.addMarker(new MarkerOptions().position(point).title(text.toString()));
-        Toast.makeText(getApplicationContext(), point.toString(), Toast.LENGTH_SHORT).show();
-
-        // Create the Database
-        LocationDbHelper locationDbHelper = new LocationDbHelper(getApplicationContext());
-        SQLiteDatabase db = locationDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(LocationContract.LocationEntry.COLUMN_NAME_LATITUDE, point.latitude);
-        values.put(LocationContract.LocationEntry.COLUMN_NAME_LONGITUDE, point.longitude);
-        values.put(LocationContract.LocationEntry.COLUMN_NAME_NAME, text.toString());
-
-        long newRowId = db.insert(LocationContract.LocationEntry.TABLE_NAME, null, values);
-    }
 
     // Handler for MyLocationButton - Will be replicated, and used to "save" location as office. Currently shows a toast for validation
     @Override

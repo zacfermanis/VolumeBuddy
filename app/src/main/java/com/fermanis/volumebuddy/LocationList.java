@@ -53,6 +53,12 @@ public class LocationList extends FragmentActivity {
                 // ListView Clicked item value
                 String  itemValue    = (String) listView.getItemAtPosition(position);
 
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), NewLocationActivity.class);
+                intent.putExtra("ACTION", "UPDATE");
+                intent.putExtra("LOC_NAME", itemValue);
+                startActivity(intent);
+
                 // Show Alert
                 Toast.makeText(getApplicationContext(),
                         "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
