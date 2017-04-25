@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class LocationDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Locations.db";
 
     private static final String SQL_CREATE_ENTRIES =
@@ -22,7 +22,8 @@ public class LocationDbHelper extends SQLiteOpenHelper {
                     LocationContract.LocationEntry.COLUMN_NAME_ALARM_VOLUME + " INT," +
                     LocationContract.LocationEntry.COLUMN_NAME_MEDIA_VOLUME + " INT," +
                     LocationContract.LocationEntry.COLUMN_NAME_RINGER_VOLUME + " INT," +
-                    LocationContract.LocationEntry.COLUMN_NAME_NOTIFICATION_VOLUME + " INT)";
+                    LocationContract.LocationEntry.COLUMN_NAME_NOTIFICATION_VOLUME + " INT," +
+                    LocationContract.LocationEntry.COLUMN_NAME_GEOFENCE_ID + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + LocationContract.LocationEntry.TABLE_NAME;

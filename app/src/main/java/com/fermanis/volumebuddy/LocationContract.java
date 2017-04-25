@@ -19,5 +19,6 @@ public final class LocationContract {
         public static final String COLUMN_NAME_RINGER_VOLUME = "ringer";
         public static final String COLUMN_NAME_NOTIFICATION_VOLUME = "notification";
         public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_GEOFENCE_ID = "geofence";
     }
 }

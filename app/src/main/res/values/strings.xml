@@ -4,7 +4,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -25,7 +25,19 @@
     <string name="permission_required_toast">Location permission is required for Volume Buddy.</string>
     <string name="title_activity_landing_page">LandingPage</string>
     <string name="title_activity_new_location">NewLocation</string>
-
+    <string name="geofence_not_available">Geofence Service is Not Available</string>
+    <string name="geofence_too_many_geofences">Too many Geofences</string>
+    <string name="geofence_too_many_pending_intents">Too Many Pending Intents</string>
+    <string name="unknown_geofence_error">Unknown Geofence Error</string>
+    <string name="geofence_transition_invalid_type">
+        Geofence transition error: invalid transition type %1$d
+    </string>
+    <string name="geofence_transition_notification_text">Transition Notification Text</string>
+    <string name="geofence_transition_entered">Geofence Entered</string>
+    <string name="geofence_transition_exited">Geofence Exit</string>
+    <string name="unknown_geofence_transition">Geofence Unknown Transition</string>
+    <string name="geofences_added">Added Geofence</string>
+    <string name="geofences_removed">Removed Geofence</string>
 
 
 </resources>

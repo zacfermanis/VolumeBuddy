@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Oauth2 via Facebook/Google/Twitter? I imagine there's a social module akin to Spring Security Social...
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "zacfermanis@gmail.com:pass", "admin@fermanis.com:password", "a@b:aaaaa"
+            "zacfermanis@gmail.com:passs", "admin@fermanis.com:password", "a@b:aaaaa"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
